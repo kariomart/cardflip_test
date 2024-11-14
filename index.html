@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Card Peel Effect</title>
     <link rel="stylesheet" href="peel.css">
     <style>
@@ -19,28 +20,34 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: 50px;
+            padding-bottom: min(50px, 8vh);
+            touch-action: none;
         }
 
         .peel {
-            width: 225px;
-            height: 315px;
-            border-radius: 12px;
+            width: min(300px, 65vw);
+            height: min(420px, 91vw);
+            border-radius: min(16px, 3.5vw);
         }
         
         .peel-top {
             background: url('card-back.png') center/cover;
-            border-radius: 12px;
+            border-radius: min(16px, 3.5vw);
         }
         
         .peel-back {
             background: url('card-front.png') center/cover;
-            border-radius: 12px;
+            border-radius: min(16px, 3.5vw);
         }
         
         .peel-bottom {
             background: transparent;
-            border-radius: 12px;
+            border-radius: min(16px, 3.5vw);
+        }
+
+        * {
+            -webkit-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
