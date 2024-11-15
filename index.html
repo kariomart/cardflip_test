@@ -20,22 +20,22 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: 50px;
+            padding-bottom: 20vh;
         }
 
         .peel {
-            width: 337.5px;
+            width: 360px;
             height: 472.5px;
             border-radius: 12px;
         }
         
         .peel-top {
-            background: url('card-back.png') center/cover;
+            background: url('DOUBLECARDBACK.png') center/cover;
             border-radius: 12px;
         }
         
         .peel-back {
-            background: url('card-front.png') center/cover;
+            background: url('DOUBLECARDFRONT.png') center/cover;
             border-radius: 12px;
         }
         
@@ -56,11 +56,10 @@
             var element = document.getElementById('peelElement');
             var peel = new Peel(element, {
                 corner: Peel.Corners.BOTTOM_LEFT,
-                // mode: 'book',
-                // topShadow: false,
-                // backShadow: false,
-                // bottomShadow: false,
-                // backReflection: false
+                topShadow: true,
+                backShadow: true,
+                bottomShadow: false,
+                backReflection: true
             });
 
             let currentX, currentY;
