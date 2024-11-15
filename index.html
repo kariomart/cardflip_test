@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Card Peel Effect</title>
     <link rel="stylesheet" href="peel.css">
     <style>
         body {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             background: url('bg.jpg') center/cover;
             display: flex;
             flex-direction: column;
@@ -20,34 +20,28 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: min(50px, 8vh);
-            touch-action: none;
+            padding-bottom: 50px;
         }
 
         .peel {
-            width: min(300px, 65vw);
-            height: min(420px, 91vw);
-            border-radius: min(16px, 3.5vw);
+            width: 337.5px;
+            height: 472.5px;
+            border-radius: 12px;
         }
         
         .peel-top {
             background: url('card-back.png') center/cover;
-            border-radius: min(16px, 3.5vw);
+            border-radius: 12px;
         }
         
         .peel-back {
             background: url('card-front.png') center/cover;
-            border-radius: min(16px, 3.5vw);
+            border-radius: 12px;
         }
         
         .peel-bottom {
             background: transparent;
-            border-radius: min(16px, 3.5vw);
-        }
-
-        * {
-            -webkit-user-select: none;
-            user-select: none;
+            border-radius: 12px;
         }
     </style>
 </head>
@@ -70,27 +64,45 @@
             });
 
             let currentX, currentY;
+            let startX, startY;
+            let adjustedX, adjustedY
+            let startedDrag;
             let animationFrame;
+
+            peel.handlePress(function(evt, x, y) {
+            // Store and log the initial click position
+            startX = x;
+            startY = y;
+            console.log('Click position:', { x: startX, y: startY });
+        }, document.body);  // Using document.body as the hit area
 
             // Add drag handling
             peel.handleDrag(function(evt, x, y) {
+                if (!startedDrag) {
+                    startX = x;
+                    startY = y;
+                    startedDrag = true;
+                }
                 currentX = x;
                 currentY = y;
-                this.setPeelPosition(x, y);
+                adjustedX =  currentX - startX;
+                adjustedY = currentY - startY;
+                console.log(0+adjustedX, 470+adjustedY);
+                this.setPeelPosition(0+adjustedX, 470+adjustedY);
             });
 
             // Add release handling
             function animate() {
-                // Calculate distance to move this frame
-                let dx = (peel.corner.x - currentX) * 0.15;
-                let dy = (peel.corner.y - currentY) * 0.15;
+                // Calculate distance to move this frame (from adjusted position back to 0)
+                let dx = (0 - adjustedX) * 0.15;
+                let dy = (0 - adjustedY) * 0.15;
                 
-                // Update current position
-                currentX += dx;
-                currentY += dy;
+                // Update adjusted positions
+                adjustedX += dx;
+                adjustedY += dy;
                 
-                // Apply the new position
-                peel.setPeelPosition(currentX, currentY);
+                // Apply the new position relative to corner
+                peel.setPeelPosition(0+adjustedX, 470+adjustedY);
                 
                 // Continue animation if not close enough to corner
                 if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
@@ -103,6 +115,7 @@
 
             // Start animation on release
             document.addEventListener('mouseup', function() {
+                startedDrag = false;
                 if (animationFrame) {
                     cancelAnimationFrame(animationFrame);
                 }
