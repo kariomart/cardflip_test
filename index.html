@@ -92,29 +92,32 @@
 
             // Add release handling
             function animate() {
-                // Calculate distance to move this frame (from adjusted position back to 0)
-                let dx = (0 - adjustedX) * 0.15;
-                let dy = (0 - adjustedY) * 0.15;
+                // Calculate distance to move this frame from the current PEEL position
+                let dx = (38 - (38 + adjustedX)) * 0.15;  // Move from current adjusted position back to 38
+                let dy = (925 - (925 + adjustedY)) * 0.15;  // Move from current adjusted position back to 925
                 
                 // Update adjusted positions
                 adjustedX += dx;
                 adjustedY += dy;
                 
-                // Apply the new position relative to corner
-                peel.setPeelPosition(0+adjustedX, 470+adjustedY);
+                // Apply the new position using the same offset pattern as the drag
+                peel.setPeelPosition(38 + adjustedX, 925 + adjustedY);
                 
-                // Continue animation if not close enough to corner
-                if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+                // Continue animation if not close enough to corner - using a smaller threshold
+                if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
                     animationFrame = requestAnimationFrame(animate);
                 } else {
                     // Snap to exact corner position at end
-                    peel.setPeelPosition(peel.corner);
+                    adjustedX = 0;  // Reset to 0 since we're using offsets
+                    adjustedY = 0;
+                    peel.setPeelPosition(38, 925);
+                    startedDrag = false;
+                    animationFrame = null;
                 }
             }
 
             // Start animation on release
             document.addEventListener('mouseup', function() {
-                startedDrag = false;
                 if (animationFrame) {
                     cancelAnimationFrame(animationFrame);
                 }
